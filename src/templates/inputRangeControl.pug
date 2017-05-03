@@ -1,0 +1,30 @@
+.control-input-range
+    input.control-input-range__input(
+        type="number",
+        :min="min",
+        :max="max",
+        @blur="onInputBlur",
+        @keydown="onInputChange",
+        v-model.number="control.trueValue"
+    )
+
+    .control-input-range__slider
+        input.control-input-range__slider-input(
+            type="range",
+            :min="control.min",
+            :max="control.max",
+            :step="control.step",
+            @keydown="onSliderChange",
+            @mousemove="onSliderChange",
+            v-model.number="control.value",
+        )
+
+    .control-input-range__steps
+        .control-input-range__steps-item(
+            v-for="(stepPosition, stepValue) in stepsPositions",
+            :style="{'left': stepPosition + 'px'}"
+        )
+            | {{ stepValue }}
+            span(v-if="unit && stepValue == lastItemIndex")
+                | &nbsp;
+                | {{ unit }}
