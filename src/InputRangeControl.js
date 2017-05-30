@@ -83,6 +83,24 @@ export default {
         });
     },
 
+    watch: {
+        /**
+         * Отслеживание изменения значения input[type="range"]
+         *
+         * обрабатываем изменение значения слайдера через вотчер потому,
+         * что onchange отрабатывает по разному в современных браузерах и IE10,
+         * а oninput не работает в IE10 вовсе
+         *
+         * @param {Number} newValue
+         * @param {Number} oldValue
+         */
+        'control.value': function (newValue, oldValue) {
+            if (newValue !== oldValue) {
+                this.onSliderChange();
+            }
+        }
+    },
+
     methods: {
         /**
          * Инициализация начальных значений
@@ -163,6 +181,10 @@ export default {
          * Range-slider: обработка изменения значения
          */
         onSliderChange: function () {
+            if (!this.control.value) {
+                return;
+            }
+
             if (this.control.value === this._lastControlValue) {
                 return;
             }
@@ -212,7 +234,7 @@ export default {
                         newValue
                     );
                     this.control.value = newSliderValue;
-                    this._emitValue(newSliderValue);
+                    this._emitValue(newValue);
                     break;
             }
         },
